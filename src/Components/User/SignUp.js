@@ -13,7 +13,7 @@ import {
   BsFillLockFill,
   BsFillPersonFill,
 } from "react-icons/bs";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { BiWorld } from "react-icons/bi";
 import { Country } from "country-state-city";
 
@@ -35,10 +35,6 @@ const SignUp = () => {
   const usertype = "user";
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(username.current.value);
-  }, [username]);
 
   const registerSubmit = (e) => {
     e.preventDefault();
