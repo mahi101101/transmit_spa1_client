@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Collapse,
@@ -11,10 +11,11 @@ import {
   NavbarText,
   Button,
 } from "reactstrap";
+import AuthContext from "../../../Authentication";
 
-export const Header = ({authenticated}) => {
-  alert(authenticated)
+export const Header = () => {
   const navigate = useNavigate();
+  const { authenticated, setAuthenticated } = useContext(AuthContext);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,32 +28,51 @@ export const Header = ({authenticated}) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
-            <NavItem>
-              <NavLink tag={Link} to="/user/profile">
-                Profile
-              </NavLink>
-            </NavItem>
+            {authenticated ? (
+              <NavItem>
+                <NavLink tag={Link} to="/user/profile">
+                  Profile
+                </NavLink>
+              </NavItem>
+            ) : (
+              ""
+            )}
           </Nav>
           <NavbarText>
-            <Button
-              color="primary"
-              className="me-2"
-              outline
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              Login
-            </Button>
-            <Button
-              outline
-              color="primary"
-              onClick={() => {
-                navigate("/signup");
-              }}
-            >
-              Signup
-            </Button>
+            {authenticated ? (
+              <Button
+                color="primary"
+                className="me-2"
+                outline
+                onClick={() => {
+                  navigate("/logout");
+                }}
+              >
+                Logout
+              </Button>
+            ) : (
+              <div>
+                <Button
+                  color="primary"
+                  className="me-2"
+                  outline
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  Login
+                </Button>
+                <Button
+                  outline
+                  color="primary"
+                  onClick={() => {
+                    navigate("/signup");
+                  }}
+                >
+                  Signup
+                </Button>
+              </div>
+            )}
           </NavbarText>
         </Collapse>
       </Navbar>

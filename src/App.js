@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Home } from "./Components/Pages/Home/Home";
@@ -8,29 +8,22 @@ import SignUp from "./Components/User/SignUp";
 import Login from "./Components/User/Login";
 import Profile from "./Components/User/Profile";
 import { ToastContainer } from "react-toastify";
+import AuthContext from "./Authentication";
+import Logout from "./Components/User/Logout";
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const token = localStorage.getItem("token");
-alert(token)
-  useEffect(() => {
-    if (token !== null) {
-      setAuthenticated(true);
-    } else {
-      setAuthenticated(false);
-    }
-  }, []);
 
   return (
     <React.Fragment>
       <Router>
-        <Header authenticated={authenticated} />
+        <Header />
         <Routes>
-          <Route path="/" element={<Home authenticated={authenticated}/>} />
-          <Route path="/signup" element={<SignUp authenticated={authenticated}/>} />
-          <Route path="/login" element={<Login authenticated={authenticated}/>} />
-          <Route path="/user/profile" element={<Profile authenticated={authenticated}/>} />
-          <Route path="/*" element={<NotFound authenticated={authenticated}/>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/user/profile" element={<Profile />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
       <ToastContainer />
