@@ -271,7 +271,7 @@ const SignUp = () => {
   return (
     <React.Fragment>
       <MetaData title={"Registration Form"} />
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <Row className="f-box justify-content-center m-0 mt-4 ">
         <Col md="6" className="border border-secondary-subtle rounded mb-5">
           <Col md="12" className="text-center p-5">
