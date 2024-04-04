@@ -7,3 +7,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
 }
+
+#root {
+  height: 100vh;
+  /* background-color: darkgray; */
+}
+
+.defaultBg{
+  background-color: white;
+}
