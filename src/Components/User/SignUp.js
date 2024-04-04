@@ -30,7 +30,7 @@ const SignUp = () => {
   const phone_number = useRef("");
   const country = useRef("");
   const email = useRef("");
-  const tc = useRef(false);
+  const [tc, setTc] = useState(false);
   const usertype = "user";
 
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ const SignUp = () => {
       myForm.set("email", email.current.value);
       myForm.set("password", password.current.value);
       myForm.set("usertype", usertype);
-      myForm.set("termsConditions", tc.current.value === "on");
+      myForm.set("termsConditions", tc);
 
       toast.success("Registration Submited", {
         position: "bottom-right",
@@ -271,12 +271,22 @@ const SignUp = () => {
     <React.Fragment>
       <MetaData title={"Registration Form"} />
       <ToastContainer />
-      <Row className="f-box justify-content-center m-0">
-        <Col md="12" className="text-center pt-5">
-          <h3>Registration Form</h3>
-        </Col>
-        <Col md="6">
-          <Form onSubmit={registerSubmit} className="px-5 py-5">
+      <Row className="f-box justify-content-center m-0 mt-4 ">
+        <Col md="6" className="border border-secondary-subtle rounded mb-5">
+          <Col md="12" className="text-center p-5">
+            <h3>Registration Form</h3>
+          </Col>
+          <Form onSubmit={registerSubmit} className="px-5 pb-5">
+            <FormGroup className="d-flex align-items-center border rounded p-1 ">
+              <BsEnvelopeFill className="mx-1 ms-2" />
+              <Input
+                className="border-0"
+                type="email"
+                name="email"
+                placeholder="Email"
+                innerRef={email}
+              />
+            </FormGroup>
             <FormGroup className="d-flex align-items-center border rounded p-1 position-relative">
               <BsFillPersonFill className="mx-1 ms-2" />
               <Input
@@ -307,26 +317,7 @@ const SignUp = () => {
                 className="border-0"
               />
             </FormGroup>
-            <FormGroup className="d-flex align-items-center border rounded p-1 ">
-              <BsEnvelopeFill className="mx-1 ms-2" />
-              <Input
-                className="border-0"
-                type="email"
-                name="email"
-                placeholder="Email"
-                innerRef={email}
-              />
-            </FormGroup>
-            <FormGroup className="d-flex align-items-center border rounded p-1 ">
-              <FaPhone className="mx-1 ms-2" />
-              <Input
-                className="border-0"
-                type="text"
-                name="phone_number"
-                placeholder="Phone Number"
-                innerRef={phone_number}
-              />
-            </FormGroup>
+
             <FormGroup className="d-flex align-items-center border rounded p-1 position-relative">
               <BsFillLockFill className="mx-1 ms-2" />
               <Input
@@ -397,17 +388,34 @@ const SignUp = () => {
                 ))}
               </Input>
             </FormGroup>
-            <FormGroup check>
-              <Input id="checkbox2" type="checkbox" innerRef={tc} />
+            <FormGroup className="d-flex align-items-center border rounded p-1 ">
+              <FaPhone className="mx-1 ms-2" />
+              <Input
+                className="border-0"
+                type="text"
+                name="phone_number"
+                placeholder="Phone Number"
+                innerRef={phone_number}
+              />
+            </FormGroup>
+            <FormGroup check className="ms-2 pt-2">
+              <Input
+                id="checkbox2"
+                type="checkbox"
+                value={!tc ? "checked" : "unchecked"}
+                onChange={() => {
+                  setTc(!tc);
+                }}
+              />
               <Label check>Terms & Conditions</Label>
             </FormGroup>
             <Button
               type="submit"
               value="register"
               outline
-              color="warning"
-              className="w-100"
-              // disabled={tc.current.value ? true : false}
+              color={!tc ? "warning" : "secondary"}
+              className="w-100 mt-4"
+              disabled={tc ? true : false}
             >
               Register
             </Button>
