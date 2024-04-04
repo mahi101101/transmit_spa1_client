@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Form, Input, Col, Row, Button, FormGroup, Label } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import validator from "validator";
 import MetaData from "../MetaData";
 import Loader from "../Loader/Loader";
@@ -16,6 +16,7 @@ import {
 import { toast } from "react-toastify";
 import { BiWorld } from "react-icons/bi";
 import { Country } from "country-state-city";
+import axios from "axios";
 
 const SignUp = () => {
   const [showPassword, setShowPass] = useState(false);
@@ -62,16 +63,37 @@ const SignUp = () => {
       myForm.set("usertype", usertype);
       myForm.set("termsConditions", tc);
 
-      toast.success("Registration Submited", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+   // Converting formdata to Json formate
+   const formDataToJson = {};
+   for (const [key, value] of myForm.entries()) {
+   formDataToJson[key] = value;
+  }
+  
+   axios.post('http://localhost:8080/register',formDataToJson)
+  .then(Response=>{
+    console.log("Response: ",Response.data)
+    toast.success("Registration Submited", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  
+
+  })
+  .catch(error=>{
+    console.error('Error:', error);
+    toast.error("Error occurred during registration");
+
+  })
+
+
+
+     
 
       console.log([...myForm.entries()]);
     }
