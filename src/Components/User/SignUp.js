@@ -66,7 +66,6 @@ const SignUp = () => {
       myForm.set("usertype", usertype);
       myForm.set("termsConditions", tc);
 
-
       toast.success("Registration Submited", {
         position: "bottom-right",
         autoClose: 5000,
@@ -404,7 +403,7 @@ const SignUp = () => {
               <Input
                 id="checkbox2"
                 type="checkbox"
-                value={!tc ? "checked" : "unchecked"}
+                value={!tc ? "unchecked" : "checked"}
                 onChange={() => {
                   setTc(!tc);
                 }}
@@ -416,10 +415,9 @@ const SignUp = () => {
               type="submit"
               value="register"
               outline
-              color={!tc ? "warning" : "secondary"}
+              color={tc ? "warning" : "secondary"}
               className="w-100 mt-4"
-              disabled={tc ? true : false}
-
+              disabled={!tc}
             >
               Register
             </Button>
