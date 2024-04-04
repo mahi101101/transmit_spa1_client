@@ -236,17 +236,18 @@ const SignUp = () => {
           .post("https://hostpc:4001/api/v1/registeruser", userDetails)
           .then((Response) => {
             console.log("Response: ", Response.data);
-            navigate("/login");
-            toast.success("User Created, Please Login", {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
+            loginSubmit();
+            // navigate("/login");
+            // toast.success("User Created, Please Login", {
+            //   position: "bottom-right",
+            //   autoClose: 5000,
+            //   hideProgressBar: false,
+            //   closeOnClick: true,
+            //   pauseOnHover: true,
+            //   draggable: true,
+            //   progress: undefined,
+            //   theme: "light",
+            // });
           })
           .catch((error) => {
             console.error(error.response.data.data.message);
@@ -481,6 +482,60 @@ const SignUp = () => {
       return false;
     }
     return true;
+  };
+
+  const loginSubmit = () => {
+    {
+      const myForm = new FormData();
+
+      myForm.set("username", username.current.value);
+      myForm.set("password", password.current.value);
+
+      const formDataToJson = {};
+      for (const [key, value] of myForm.entries()) {
+        formDataToJson[key] = value;
+      }
+      axios
+        .post("https://localhost:4001/api/v1/loginuser", formDataToJson)
+        .then((Response) => {
+          if (Response.data.success) {
+            setAuthenticated(true);
+            toast.success("Login Successfull", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+            localStorage.setItem(
+              "token",
+              JSON.stringify(Response.data.access_token)
+            );
+            setLoadingForm(false);
+            navigate("/");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Login Failed, Invaild User or Password", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          localStorage.removeItem("token");
+        })
+        .finally(() => {
+          setLoadingForm(false);
+        });
+    }
   };
 
   return (
