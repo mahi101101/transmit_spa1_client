@@ -31,6 +31,7 @@ const SignUp = () => {
   const country = useRef("");
   const email = useRef("");
   const [tc, setTc] = useState(false);
+
   const usertype = "user";
 
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ const SignUp = () => {
       myForm.set("password", password.current.value);
       myForm.set("usertype", usertype);
       myForm.set("termsConditions", tc);
+
 
       toast.success("Registration Submited", {
         position: "bottom-right",
@@ -407,6 +409,7 @@ const SignUp = () => {
                   setTc(!tc);
                 }}
               />
+
               <Label check>Terms & Conditions</Label>
             </FormGroup>
             <Button
@@ -416,6 +419,7 @@ const SignUp = () => {
               color={!tc ? "warning" : "secondary"}
               className="w-100 mt-4"
               disabled={tc ? true : false}
+
             >
               Register
             </Button>
