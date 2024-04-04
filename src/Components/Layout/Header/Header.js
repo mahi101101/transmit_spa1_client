@@ -12,7 +12,8 @@ import {
   Button,
 } from "reactstrap";
 
-export const Header = () => {
+export const Header = ({authenticated}) => {
+  alert(authenticated)
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);

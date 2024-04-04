@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import { Form, Input, Col, Row, Button, FormGroup } from "reactstrap";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, json } from "react-router-dom";
 import validator from "validator";
 import MetaData from "../MetaData";
 import Loader from "../Loader/Loader";
 import { FaUserPen } from "react-icons/fa6";
 import { BsEyeSlash, BsEye, BsFillLockFill } from "react-icons/bs";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Login = () => {
   const [showPassword, setShowPass] = useState(false);
@@ -29,17 +30,30 @@ const Login = () => {
       myForm.set("username", username.current.value);
       myForm.set("password", password.current.value);
 
-      toast.success("Login Submited", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-
+      const formDataToJson = {};
+      for (const [key, value] of myForm.entries()) {
+      formDataToJson[key] = value;
+     }
+     const result=axios.post('http://localhost:8080/login',formDataToJson)
+     .then((Response)=>{
+        toast.success("Login Submited", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+       
+        localStorage.setItem("token",(JSON.stringify(Response.data.access_token)))
+       
+     })
+     .catch(error=>{
+     toast.error("Login Failed")
+     })
+     
       console.log([...myForm.entries()]);
     }
   };

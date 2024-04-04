@@ -1,6 +1,7 @@
 import React from 'react'
 
-const Profile = () => {
+const Profile = ({authenticated}) => {
+  alert(authenticated)
   return (
     <div>Profile</div>
   )
