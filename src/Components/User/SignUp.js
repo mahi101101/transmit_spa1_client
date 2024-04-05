@@ -250,7 +250,7 @@ const SignUp = () => {
             // });
           })
           .catch((error) => {
-            console.error(error.response.data.data.message);
+            console.error(error.response.data);
             toast.error(error.response.data.data.message, {
               position: "bottom-right",
               autoClose: 5000,
