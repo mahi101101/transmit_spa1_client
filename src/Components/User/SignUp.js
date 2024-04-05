@@ -222,6 +222,7 @@ const SignUp = () => {
         };
         const custom_data = { termsAndConditions: tc };
 
+
         const userDetails = {
           username: username.current.value,
           name: name,
@@ -274,6 +275,7 @@ const SignUp = () => {
     const localPartLength = localPart.length;
 
     const charactersToObscure = Math.max(0, localPartLength - 5);
+
 
     const obscuredLocalPart =
       localPart.substring(0, 5) +
