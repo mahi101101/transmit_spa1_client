@@ -20,7 +20,9 @@ const Logout = () => {
       {authTemp ? (
         <Row className="m-0 p-4">
           <Col md="12">
+
             <h2 className="text-success">Logged Out Successfully!!</h2>
+
             <h5 className="my-3">
               Go back to{" "}
               <a
