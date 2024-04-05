@@ -23,7 +23,7 @@ export const Header = () => {
 
   return (
     <div>
-      <Navbar expand="md" dark color="dark">
+      <Navbar expand="md" light color="light" className="border-bottom border-2">
         <NavbarBrand href="/">Trasmit SPA</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
