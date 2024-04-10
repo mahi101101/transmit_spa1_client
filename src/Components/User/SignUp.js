@@ -33,9 +33,11 @@ import { Country } from "country-state-city";
 import axios from "axios";
 import AuthContext from "../../Authentication";
 import NotFound from "../Pages/Not Found/NotFound";
+import { bool } from "prop-types";
 
 const SignUp = () => {
   const { authenticated, setAuthenticated } = useContext(AuthContext);
+  const [finalEmail, setFinalEmail] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
   const [showPassword, setShowPass] = useState(false);
   const [showCpassword, setShowCpass] = useState(false);
@@ -55,7 +57,6 @@ const SignUp = () => {
   const [modal, setModal] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [modalTc, setModalTc] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const navigate = useNavigate();
 
@@ -67,11 +68,6 @@ const SignUp = () => {
     setModal(!modal);
   };
 
-  const handleAcceptTc = () => {
-    setTc(true);
-    toggleTc();
-  };
-
   const handleEmailVerification = (e) => {
     e.preventDefault();
     if (validateEmail(email.current.value)) {
@@ -81,7 +77,7 @@ const SignUp = () => {
           `https://hostpc:4001/api/v1/user/details/email/${email.current.value}`
         )
         .then((Response) => {
-          if (Response.data.data.result) {
+          if (Response.data.success) {
             toast.error("User Exists with the email, try using another email", {
               position: "bottom-right",
               autoClose: 5000,
@@ -92,22 +88,52 @@ const SignUp = () => {
               progress: undefined,
               theme: "light",
             });
-          } else {
-            sendEmailOtp();
           }
         })
         .catch((error) => {
-          console.error(error.response.data.data.message);
-          toast.error(error.response.data.data.message, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          // console.log(error);
+
+          if (error.response && !error.response.data.success) {
+            axios
+              .get(
+                `https://hostpc:4001/api/v1/registeruser/getregsession/${email.current.value}`
+              )
+              .then((Response) => {
+                if (Response.data.success) {
+                  sendEmailOtp();
+                }
+              })
+              .catch((err) => {
+                if (otpSent) {
+                  toggle();
+                } else {
+                  toast.error(
+                    "User with this email is having an active session somewhere else, please try again later",
+                    {
+                      position: "bottom-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "light",
+                    }
+                  );
+                }
+              });
+          } else {
+            toast.error("Something went wrong", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
         })
         .finally(() => {
           setLoading(false);
@@ -117,24 +143,38 @@ const SignUp = () => {
 
   const sendEmailOtp = () => {
     const body = { email: email.current.value };
+
     setLoading(true);
+
     axios
       .post("https://hostpc:4001/api/v1/sendemail", body)
       .then((Response) => {
-        if (Response.data.message.message) {
+        console.log(Response);
+        if (Response.data.success) {
           setOtpSent(true);
           toggle();
+          toast.success(Response.message, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(Response.message, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
-        toast.success(Response.data.message.message, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
       })
       .catch((error) => {
         console.error(error.response);
@@ -163,6 +203,7 @@ const SignUp = () => {
         if (Response.data.message) {
           setOtpSent(false);
           setEmailVerified(true);
+          setFinalEmail(email.current.value);
           otp.fill("");
           setOtp(otp);
           toggle();
@@ -202,7 +243,7 @@ const SignUp = () => {
         !validateFirstName(first_name.current.value) ||
         !validateLastName(last_name.current.value) ||
         !validateUsername(username.current.value) ||
-        !validateEmail(email.current.value) ||
+        !validateEmail(finalEmail) ||
         !validatePhoneNumber(phone_number.current.value) ||
         !validatePassword(password.current.value, cpassword.current.value) ||
         !validateCountry(country.current.value)
@@ -222,13 +263,12 @@ const SignUp = () => {
         };
         const custom_data = { termsAndConditions: tc };
 
-
         const userDetails = {
           username: username.current.value,
           name: name,
           phone_number: phone_number.current.value,
           address: address,
-          email: email.current.value,
+          email: finalEmail,
           credentials: credentials,
           custom_data: custom_data,
         };
@@ -236,23 +276,20 @@ const SignUp = () => {
         axios
           .post("https://hostpc:4001/api/v1/registeruser", userDetails)
           .then((Response) => {
-            console.log("Response: ", Response.data);
             loginSubmit();
-            // navigate("/login");
-            // toast.success("User Created, Please Login", {
-            //   position: "bottom-right",
-            //   autoClose: 5000,
-            //   hideProgressBar: false,
-            //   closeOnClick: true,
-            //   pauseOnHover: true,
-            //   draggable: true,
-            //   progress: undefined,
-            //   theme: "light",
-            // });
+            toast.success("User Created, Logging you in...", {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
           })
           .catch((error) => {
-            console.error(error.response.data);
-            toast.error(error.response.data.data.message, {
+            toast.error(error.response.data.message, {
               position: "bottom-right",
               autoClose: 5000,
               hideProgressBar: false,
@@ -275,7 +312,6 @@ const SignUp = () => {
     const localPartLength = localPart.length;
 
     const charactersToObscure = Math.max(0, localPartLength - 5);
-
 
     const obscuredLocalPart =
       localPart.substring(0, 5) +
@@ -556,13 +592,19 @@ const SignUp = () => {
                 <div className="d-flex align-items-center justify-content-between w-100">
                   <div className="d-flex align-items-center w-100">
                     <BsEnvelopeFill className="mx-1 ms-2" />
-                    <Input
-                      className="border-0"
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      innerRef={email}
-                    />
+                    {emailVerified ? (
+                      <Label for="email" className="ms-2 mt-1 ps-1">
+                        {finalEmail}
+                      </Label>
+                    ) : (
+                      <Input
+                        className="border-0"
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        innerRef={email}
+                      />
+                    )}
                   </div>
                   <div>
                     {isLoading ? (
@@ -745,13 +787,11 @@ const SignUp = () => {
                     <Input
                       id="check"
                       type="checkbox"
-                      value={tc}
                       onChange={() => {
                         setTc(!tc);
                       }}
                     />
-
-                    <Label check>
+                    <Label check for="check">
                       <a
                         class="nav-link d-inline text-primary"
                         href=""
