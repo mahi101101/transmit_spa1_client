@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Row, Col } from "reactstrap";
 import MetaData from "../../MetaData";
 import AuthContext from "../../../Authentication";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
-  const { authenticated, setAuthenticated } = useContext(AuthContext);
+  const { authenticated, setAuthenticated, authenticatedUser } =
+    useContext(AuthContext);
+  const navigate = useNavigate();
+  const user = JSON.stringify(authenticatedUser);
   return (
     <React.Fragment>
       <MetaData title={"Home"} />
@@ -21,6 +25,21 @@ export const Home = () => {
               <span className="text-danger">Not Authenticated</span>
             )}
           </h4>
+          {authenticated ? (
+            <a
+              class="nav-link d-inline text-primary"
+              href=""
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/password/reset");
+              }}
+            >
+              Reset Password?
+            </a>
+          ) : (
+            ""
+          )}
+
         </Col>
       </Row>
     </React.Fragment>

@@ -12,7 +12,8 @@ import axios from "axios";
 import NotFound from "../Pages/Not Found/NotFound";
 
 const Login = () => {
-  const { authenticated, setAuthenticated } = useContext(AuthContext);
+  const { authenticated, setAuthenticated, setAuthenticatedUser } =
+    useContext(AuthContext);
   const [showPassword, setShowPass] = useState(false);
   const username = useRef("");
   const password = useRef("");
@@ -53,10 +54,20 @@ const Login = () => {
               progress: undefined,
               theme: "light",
             });
-            localStorage.setItem(
-              "token",
-              JSON.stringify(Response.data.access_token)
-            );
+            localStorage.setItem("token", JSON.stringify(Response.data.data));
+            setTimeout(() => {
+              console.log("deleted!!");
+              localStorage.removeItem("token");
+            }, 2 * 60000);
+            axios
+              .get(
+                "https://hostpc:4001/api/v1/user/details/username/" +
+                  username.current.value
+              )
+              .then((resp) => {
+                setAuthenticatedUser(resp.data.data.result);
+              });
+
             setLoding(false);
             navigate("/");
           }
@@ -186,19 +197,33 @@ const Login = () => {
                   {showPassword ? <BsEyeSlash /> : <BsEye />}
                 </button>
               </FormGroup>
-              <p>
-                New user?{" "}
-                <a
-                  class="nav-link d-inline text-primary"
-                  href=""
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate("/signup");
-                  }}
-                >
-                  SignUp
-                </a>
-              </p>
+              <div className="container">
+                <p className="float-start">
+                  New user?{" "}
+                  <a
+                    class="nav-link d-inline text-primary"
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/signup");
+                    }}
+                  >
+                    SignUp
+                  </a>
+                </p>
+                <p className="float-end">
+                  <a
+                    class="nav-link d-inline text-primary"
+                    href=""
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/password/forgot");
+                    }}
+                  >
+                    Forgot Password?
+                  </a>
+                </p>
+              </div>
               {isLoding ? (
                 <Loader />
               ) : (

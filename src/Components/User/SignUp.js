@@ -33,7 +33,6 @@ import { Country } from "country-state-city";
 import axios from "axios";
 import AuthContext from "../../Authentication";
 import NotFound from "../Pages/Not Found/NotFound";
-import { bool } from "prop-types";
 
 const SignUp = () => {
   const { authenticated, setAuthenticated } = useContext(AuthContext);
