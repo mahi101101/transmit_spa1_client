@@ -68,7 +68,7 @@ const Login = () => {
             }, 2 * 60000);
             axios
               .get(
-                "https://hostpc:4001/api/v1/user/details/username/" +
+                "https://hostpc.com:4001/api/v1/user/details/username/" +
                   username.current.value
               )
               .then((resp) => {
