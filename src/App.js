@@ -8,11 +8,11 @@ import SignUp from "./Components/User/SignUp";
 import Login from "./Components/User/Login";
 import Profile from "./Components/User/Profile";
 import { ToastContainer } from "react-toastify";
-import AuthContext from "./Authentication";
 import Logout from "./Components/User/Logout";
+import ResetPassword from "./Components/User/ResetPassword";
+import ForgotPassword from "./Components/User/ForgotPassword";
 
 function App() {
-
   return (
     <React.Fragment>
       <Router>
@@ -23,6 +23,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/user/profile" element={<Profile />} />
+          <Route path="/password/forgot" element={<ForgotPassword />} />
+          <Route path="/password/reset" element={<ResetPassword />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </Router>
