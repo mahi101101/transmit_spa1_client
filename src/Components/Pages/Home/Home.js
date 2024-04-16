@@ -8,7 +8,7 @@ export const Home = () => {
   const { authenticated, setAuthenticated, authenticatedUser } =
     useContext(AuthContext);
   const navigate = useNavigate();
-  const user = JSON.stringify(authenticatedUser);
+  const user = authenticatedUser;
   return (
     <React.Fragment>
       <MetaData title={"Home"} />
@@ -25,7 +25,7 @@ export const Home = () => {
               <span className="text-danger">Not Authenticated</span>
             )}
           </h4>
-          {authenticated ? (
+          {authenticated && user.identity_providers[0].source != "Google" ? (
             <a
               class="nav-link d-inline text-primary"
               href=""
@@ -39,7 +39,6 @@ export const Home = () => {
           ) : (
             ""
           )}
-
         </Col>
       </Row>
     </React.Fragment>

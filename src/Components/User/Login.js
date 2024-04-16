@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import AuthContext from "../../Authentication";
 import { Form, Input, Col, Row, Button, FormGroup } from "reactstrap";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { BsEyeSlash, BsEye, BsFillLockFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 import axios from "axios";
 import NotFound from "../Pages/Not Found/NotFound";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const { authenticated, setAuthenticated, setAuthenticatedUser } =
@@ -19,6 +20,12 @@ const Login = () => {
   const password = useRef("");
   const [isLoding, setLoding] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authenticated) {
+      navigate("/home");
+    }
+  }, []);
 
   const loginSubmit = (e) => {
     e.preventDefault();
@@ -149,6 +156,11 @@ const Login = () => {
     return true;
   };
 
+  const handlesociallogin = (e) => {
+    e.preventDefault();
+    window.location.href = "https://hostpc.com:4001/api/v1/googlelogin";
+  };
+
   return (
     <React.Fragment>
       <MetaData title={"Registration Form"} />
@@ -160,7 +172,7 @@ const Login = () => {
             <Col md="12" className="text-center p-5">
               <h3>Login</h3>
             </Col>
-            <Form onSubmit={loginSubmit} className="px-5 pb-5">
+            <Form onSubmit={loginSubmit} className="px-5 pb-4">
               <FormGroup className="d-flex align-items-center border rounded p-1 position-relative">
                 <FaUserPen className="mx-1 ms-2" />
                 <Input
@@ -238,6 +250,17 @@ const Login = () => {
                 </Button>
               )}
             </Form>
+            <div className="px-5 pb-5">
+              <Button
+                onClick={handlesociallogin}
+                outline
+                color="primary"
+                className="w-100"
+              >
+                Sign in with Google{"  "}
+                <FcGoogle className="fs-4 ms-2" />
+              </Button>
+            </div>
           </Col>
         </Row>
       )}
