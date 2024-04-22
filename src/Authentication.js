@@ -17,10 +17,15 @@ export const AuthProvider = ({ children }) => {
       const idToken = jwtDecode(jsonToken.id_token);
 
       axios
-        .get("https://hostpc:4001/api/v1/user/details/email/" + idToken.email)
+
+        .get(
+          "https://hostpc.com:4001/api/v1/user/details/email/" + idToken.email
+        )
         .then((resp) => {
           setAuthenticatedUser(resp.data.data.result);
-        });
+        })
+        .catch((err) => {});
+
     } else {
       setAuthenticated(false);
     }

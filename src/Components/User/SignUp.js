@@ -73,7 +73,7 @@ const SignUp = () => {
       setLoading(true);
       axios
         .get(
-          `https://hostpc:4001/api/v1/user/details/email/${email.current.value}`
+          `https://hostpc.com:4001/api/v1/user/details/email/${email.current.value}`
         )
         .then((Response) => {
           if (Response.data.success) {
@@ -95,7 +95,9 @@ const SignUp = () => {
           if (error.response && !error.response.data.success) {
             axios
               .get(
-                `https://hostpc:4001/api/v1/registeruser/getregsession/${email.current.value}`
+
+                `https://hostpc.com:4001/api/v1/registeruser/getregsession/${email.current.value}`
+
               )
               .then((Response) => {
                 if (Response.data.success) {
@@ -146,7 +148,7 @@ const SignUp = () => {
     setLoading(true);
 
     axios
-      .post("https://hostpc:4001/api/v1/sendemail", body)
+      .post("https://hostpc.com:4001/api/v1/sendemail", body)
       .then((Response) => {
         console.log(Response);
         if (Response.data.success) {
@@ -197,7 +199,7 @@ const SignUp = () => {
     const body = { email: email.current.value, passcode: otp.join("") };
     setLoadingModal(true);
     axios
-      .post("https://hostpc:4001/api/v1/validateemail", body)
+      .post("https://hostpc.com:4001/api/v1/validateemail", body)
       .then((Response) => {
         if (Response.data.message) {
           setOtpSent(false);
@@ -273,7 +275,7 @@ const SignUp = () => {
         };
 
         axios
-          .post("https://hostpc:4001/api/v1/registeruser", userDetails)
+          .post("https://hostpc.com:4001/api/v1/registeruser", userDetails)
           .then((Response) => {
             loginSubmit();
             toast.success("User Created, Logging you in...", {

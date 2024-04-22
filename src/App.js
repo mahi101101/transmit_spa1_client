@@ -12,6 +12,9 @@ import Logout from "./Components/User/Logout";
 import ResetPassword from "./Components/User/ResetPassword";
 import ForgotPassword from "./Components/User/ForgotPassword";
 
+import Redirect from "./Components/Pages/Redirect/Redirect";
+
+
 function App() {
   return (
     <React.Fragment>
@@ -19,6 +22,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/redirect" element={<Redirect />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />

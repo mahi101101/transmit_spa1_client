@@ -1,4 +1,7 @@
-import React, { useContext, useEffect } from "react";
+
+import React, { useContext, useEffect, useState } from "react";
+
+
 import { Row, Col } from "reactstrap";
 import MetaData from "../../MetaData";
 import AuthContext from "../../../Authentication";
@@ -8,7 +11,20 @@ export const Home = () => {
   const { authenticated, setAuthenticated, authenticatedUser } =
     useContext(AuthContext);
   const navigate = useNavigate();
-  const user = JSON.stringify(authenticatedUser);
+
+  const [provider, setProvider] = useState("");
+  useEffect(() => {
+    try {
+      setProvider(
+        authenticatedUser
+          ? authenticatedUser.identity_providers.length !== 0
+            ? authenticatedUser.identity_providers[0].source
+            : ""
+          : ""
+      );
+    } catch (err) {}
+  }, [authenticatedUser]);
+
   return (
     <React.Fragment>
       <MetaData title={"Home"} />
@@ -25,7 +41,9 @@ export const Home = () => {
               <span className="text-danger">Not Authenticated</span>
             )}
           </h4>
-          {authenticated ? (
+
+          {authenticated && provider !== "Google" ? (
+
             <a
               class="nav-link d-inline text-primary"
               href=""

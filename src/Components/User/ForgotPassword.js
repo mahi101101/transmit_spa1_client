@@ -91,7 +91,9 @@ const ForgotPassword = () => {
     setLoding(true);
     if (validatePassword(cpassword.current.value)) {
       axios
-        .put("https://hostpc:4001/api/v1/user/Password/forgot", {
+
+        .put("https://hostpc.com:4001/api/v1/user/Password/forgot", {
+
           email: validEmail,
           password: npassword.current.value,
         })
@@ -136,14 +138,17 @@ const ForgotPassword = () => {
       if (email.current.value) {
         axios
           .get(
-            "https://hostpc:4001/api/v1/user/password/forgot/getsession/" +
+
+            "https://hostpc.com:4001/api/v1/user/password/forgot/getsession/" +
+
               email.current.value
           )
           .then((resp) => {
             setVLoding(true);
             axios
               .get(
-                "https://hostpc:4001/api/v1/user/details/email/" +
+                "https://hostpc.com:4001/api/v1/user/details/email/" +
+
                   email.current.value
               )
               .then((resp) => {
@@ -218,7 +223,9 @@ const ForgotPassword = () => {
     setVLoding(true);
 
     axios
-      .post("https://hostpc:4001/api/v1/sendemail", body)
+
+      .post("https://hostpc.com:4001/api/v1/sendemail", body)
+
       .then((Response) => {
         if (Response.data.success) {
           setOtpSent(true);
@@ -267,7 +274,9 @@ const ForgotPassword = () => {
     const body = { email: email.current.value, passcode: otp.join("") };
     setLoadingModal(true);
     axios
-      .post("https://hostpc:4001/api/v1/validateemail", body)
+
+      .post("https://hostpc.com:4001/api/v1/validateemail", body)
+
       .then((Response) => {
         if (Response.data.message) {
           setOtpSent(false);
