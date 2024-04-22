@@ -95,7 +95,9 @@ const SignUp = () => {
           if (error.response && !error.response.data.success) {
             axios
               .get(
+
                 `https://hostpc.com:4001/api/v1/registeruser/getregsession/${email.current.value}`
+
               )
               .then((Response) => {
                 if (Response.data.success) {

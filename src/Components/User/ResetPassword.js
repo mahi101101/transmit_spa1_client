@@ -89,7 +89,9 @@ const ResetPassword = () => {
     if (password.current.value === cpassword.current.value) {
       if (validatePassword(password.current.value)) {
         axios
+
           .post("https://hostpc.com:4001/api/v1/user/password/reset", {
+
             username: authenticatedUser.username,
             password: opassword.current.value,
             new_password: password.current.value,

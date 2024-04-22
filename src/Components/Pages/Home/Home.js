@@ -1,4 +1,7 @@
+
 import React, { useContext, useEffect, useState } from "react";
+
+
 import { Row, Col } from "reactstrap";
 import MetaData from "../../MetaData";
 import AuthContext from "../../../Authentication";
@@ -8,6 +11,7 @@ export const Home = () => {
   const { authenticated, setAuthenticated, authenticatedUser } =
     useContext(AuthContext);
   const navigate = useNavigate();
+
   const [provider, setProvider] = useState("");
   useEffect(() => {
     try {
@@ -20,6 +24,7 @@ export const Home = () => {
       );
     } catch (err) {}
   }, [authenticatedUser]);
+
   return (
     <React.Fragment>
       <MetaData title={"Home"} />
@@ -36,7 +41,9 @@ export const Home = () => {
               <span className="text-danger">Not Authenticated</span>
             )}
           </h4>
+
           {authenticated && provider !== "Google" ? (
+
             <a
               class="nav-link d-inline text-primary"
               href=""
@@ -50,6 +57,7 @@ export const Home = () => {
           ) : (
             ""
           )}
+
         </Col>
       </Row>
     </React.Fragment>
